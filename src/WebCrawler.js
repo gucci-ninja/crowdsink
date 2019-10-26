@@ -1,10 +1,23 @@
 const request = require('request');
 const cheerio = require('cheerio');
 
-var url = "https://www.airlinequality.com/airline-reviews/jetblue-airways/";
-var rents = "article.list-item";
-var childs = "div.text_content";
+const crawlers = [
+    {
+        source: 'Twitter',
+        url: 'https://twitter.com/hashtag/jetblue?src=hash',
+        parentCrawl: 'li.stream-item',
+        childCrawl: 'p.tweet-text'
+    },
+    {
+        source: 'AirlineQuality',
+        url: 'https://www.airlinequality.com/airline-reviews/jetblue-airways/',
+        parentCrawl: 'article.list-item',
+        childCrawl: 'div.text_content'
+    },
+    {
 
+    }
+]
 
 function crawl(URL, parent, child) {
     var texts = [];
@@ -18,7 +31,7 @@ function crawl(URL, parent, child) {
                 var text = $(this).find(child).text();
                 
                 // call sentiment function?
-
+                
 
                 // replace with writing to database.
 

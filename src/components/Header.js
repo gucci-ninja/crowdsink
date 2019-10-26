@@ -1,28 +1,25 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-
-import firebase from 'firebase';
-import { firebaseConfig } from './Conf.js';
+import db from '../config';
 
 
 class Header extends React.Component {
    constructor() {
       super()
-      this.app = firebase.initializeApp(firebaseConfig);
-      this.database = this.app.database().ref().child('name');
-
       this.state = {
          name: "CROWDSINK"
       }
    }
 
    componentDidMount() {
-      this.database.on('value', snap => {
-         this.setState({
-            name: snap.val()
-         });
-      });
+      db.collection('companies')
+        .doc('jet blue')
+        .onSnapshot((snap) => {
+          this.setState({
+            name: snap.data().name
+          })
+        });
    }
 
    render() {

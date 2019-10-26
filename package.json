@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
     "@google-cloud/language": "^3.5.1",
-=======
->>>>>>> master
     "bootstrap": "^4.3.1",
     "cheerio": "^1.0.0-rc.3",
     "firebase": "^7.2.2",

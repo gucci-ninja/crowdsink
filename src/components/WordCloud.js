@@ -4,11 +4,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import db from '../config';
-import WebCrawler from '../WebCrawler.js';
+// import WebCrawler from '../WebCrawler.js';
 import FadeIn from 'react-fade-in';
 
 const data = [
-  { text: "Hey", value: 1000},
+  { text: "Hey", value: 1000 },
   { text: "lol", value: 200 },
   { text: "first impression", value: 800 },
   { text: "very cool", value: 1000000 },
@@ -26,30 +26,68 @@ class WordCloud extends React.Component {
   doStuff() {
     console.log('stufff');
     window.location.reload();
-    
+
     // this is where we will write to the database ussing db object and WebCrawler object
 
   }
-  render(){
-    return(
+
+  // get data of a company collection
+  getData = async (company) => {
+    db.collection('companies')
+      .doc(company)
+      .collection('reviews')
+      .onSnapshot((snap) => {
+        console.log(snap.docs); //querysnapshot of array
+        snap.forEach((s) => {
+          console.log(s.get('sentiment') + ":" + s.get('text'))
+        })
+        // this.setState({
+        //    name: snap.data().text
+        // })
+      });
+  }
+
+  // add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
+  addData = async (company, arr) => {
+    for (let review of arr) {
+      db.collection('companies')
+        .doc(company)
+        .collection('reviews')
+        .add(
+          {
+            sentiment: review[0],
+            text: review[1]
+          }
+        )
+    }
+    this.getData('JetBlue');
+  }
+
+  componentDidMount() {
+    // this.addData('JetBlue', [[3.2, 'holy shit it lit'], [0.1, 'suck ass xd']])
+    this.getData('JetBlue');
+  }
+
+  render() {
+    return (
       <div class="container">
-      <InputGroup className="mb-3">
-        <FormControl
-        placeholder="Thing"
-        aria-label="company"
-        aria-describedby="basic-addon2"
-        size="lg"
-        />
-        <InputGroup.Append>
-        <Button variant="primary" size="lg" onClick={this.doStuff}>Go</Button>
-        </InputGroup.Append>
-      </InputGroup>
-      <FadeIn>
-        <div><WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} /></div>
-      </FadeIn>
-      
-    </div>
-    )        
+        <InputGroup className="mb-3">
+          <FormControl
+            placeholder="Thing"
+            aria-label="company"
+            aria-describedby="basic-addon2"
+            size="lg"
+          />
+          <InputGroup.Append>
+            <Button variant="primary" size="lg" onClick={this.doStuff}>Go</Button>
+          </InputGroup.Append>
+        </InputGroup>
+        <FadeIn>
+          <div><WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} /></div>
+        </FadeIn>
+
+      </div>
+    )
   }
 }
 

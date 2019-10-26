@@ -3,8 +3,8 @@ import WordCloudd from "react-d3-cloud";
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import db from '../config';
-import WebCrawler from '../WebCrawler.js';
+// import db from '../config';
+// import WebCrawler from '../WebCrawler.js';
 import FadeIn from 'react-fade-in';
 
 const data = [
@@ -12,6 +12,14 @@ const data = [
   { text: "lol", value: 200 },
   { text: "first impression", value: 800 },
   { text: "very cool", value: 1000000 },
+  { text: "Heys", value: 1000},
+  { text: "losl", value: 200 },
+  { text: "fisrst impression", value: 800 },
+  { text: "versy cool", value: 1000000 },
+  { text: "Hewy", value: 1000},
+  { text: "lowl", value: 200 },
+  { text: "first wimpression", value: 800 },
+  { text: "very coowl", value: 1000000 },
   { text: "duck", value: 10 }
 ];
 

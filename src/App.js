@@ -1,30 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import WordCloud from './components/WordCloud'
-import Header from './components/Header'
+import WordCloud from './components/WordCloud';
+import Header from './components/Header';
+import Hypothesis from './components/Hypothesis';
+import Info from './components/Info';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <div className="App">
+    <div>
+      <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet"></link>
       <Header></Header>
-      <WordCloud></WordCloud>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-
+      <br></br>
+      <br></br>
+      {/* <section id="hypothesis"><Hypothesis></Hypothesis></section> */}
+      <section id="demo">
+        <WordCloud></WordCloud>
+      </section>
+      <Info></Info>
+      
     </div>
   );
 }

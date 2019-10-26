@@ -1,28 +1,25 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-
-import firebase from 'firebase';
-import { firebaseConfig } from './Conf.js';
+import db from '../config';
 
 
 class Header extends React.Component {
    constructor() {
       super()
-      this.app = firebase.initializeApp(firebaseConfig);
-      this.database = this.app.database().ref().child('name');
-
       this.state = {
          name: "CROWDSINK"
       }
    }
 
    componentDidMount() {
-      this.database.on('value', snap => {
-         this.setState({
-            name: snap.val()
-         });
-      });
+      db.collection('companies')
+        .doc('JetBlue')
+        .onSnapshot((snap) => {
+          this.setState({
+            name: snap.data().name
+          })
+        });
    }
 
    render() {
@@ -33,9 +30,11 @@ class Header extends React.Component {
                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="mr-auto">
-                     <Nav.Link href="#home">Home</Nav.Link>
                      <Nav.Link href="#hypothesis">Our Hypothesis</Nav.Link>
                      <Nav.Link href="#demo">Demo</Nav.Link>
+                     <Nav.Link href="#info">More Information</Nav.Link>
+                     
+                     
                   </Nav>
                </Navbar.Collapse>
             </Navbar>

@@ -6,7 +6,7 @@
 .pnp.js
 /src/components/Conf.js
 /backend/node_modules
-/src/config.js
+src/config.js
 
 # testing
 /coverage

@@ -17,7 +17,3 @@ request(URL, function (err, res, body) {
    }
    console.log("count: "+ count + "\n");
 });
-
-
-
-

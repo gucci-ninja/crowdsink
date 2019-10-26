@@ -10,16 +10,10 @@ request(URL, function (err, res, body) {
    else{
     let $ = cheerio.load(body);  //loading content of HTML body
     $('li.stream-item').each(function(index){
-    //    var name = $(this).find('.fullname').text();
        var tweet = $(this).find('p.tweet-text').text();
        count++;
-    //    console.log('user : ' + name);   //name of the user
        console.log('tweet : ' + tweet);   //tweet content
     });
    }
    console.log("count: "+ count + "\n");
 });
-
-
-
-

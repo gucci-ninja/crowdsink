@@ -37,7 +37,7 @@ function crawl(URL, parent, child) {
                     texts.push(text);
                 });
 
-                npl(texts);
+                nlp(texts);
                 resolve();
             }
         });
@@ -45,7 +45,7 @@ function crawl(URL, parent, child) {
     })
 }
 
-async function npl(texts) {
+async function nlp(texts) {
     // Imports the Google Cloud client library
     const language = require('@google-cloud/language');
 

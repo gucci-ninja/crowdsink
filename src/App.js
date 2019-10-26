@@ -1,10 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import WordCloud from './components/WordCloud'
+import Header from './components/Header'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <div className="App">
+      <Header></Header>
+      <WordCloud></WordCloud>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -19,6 +24,7 @@ function App() {
           Learn React
         </a>
       </header>
+
     </div>
   );
 }

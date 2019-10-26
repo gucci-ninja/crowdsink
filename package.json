@@ -12,7 +12,8 @@
     "react-scripts": "3.2.0",
     "request": "^2.88.0",
     "twitter": "^1.7.1",
-    "wordcloud": "^1.1.0"
+    "wordcloud": "^1.1.0",
+    "firebase": "^7.2.2"
   },
   "scripts": {
     "start": "react-scripts start",

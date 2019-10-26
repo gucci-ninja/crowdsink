@@ -4,7 +4,8 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import db from '../config';
-
+import WebCrawler from '../WebCrawler.js';
+import FadeIn from 'react-fade-in';
 
 const data = [
   { text: "Hey", value: 1000},
@@ -25,7 +26,8 @@ class WordCloud extends React.Component {
   doStuff() {
     console.log('stufff');
     window.location.reload();
-    // this is where we will write to the database
+    
+    // this is where we will write to the database ussing db object and WebCrawler object
 
   }
   render(){
@@ -42,7 +44,10 @@ class WordCloud extends React.Component {
         <Button variant="primary" size="lg" onClick={this.doStuff}>Go</Button>
         </InputGroup.Append>
       </InputGroup>
-      <WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} />
+      <FadeIn>
+        <div><WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} /></div>
+      </FadeIn>
+      
     </div>
     )        
   }

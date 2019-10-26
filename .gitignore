@@ -7,6 +7,7 @@
 /src/components/Conf.js
 /backend/node_modules
 src/config.js
+package-lock.json
 
 # testing
 /coverage

@@ -22,22 +22,27 @@ const crawlers = [
     // }
 ]
 
-async function crawl(URL, parent, child) {
-    var texts = [];
-    await request(URL, function (err, res, body) {
-        if (err) {
-            console.log("an error occured : " + err);
-        }
-        else {
-            let $ = cheerio.load(body); //loading content of HTML body
-            $(parent).each(function (index) {
-                var text = $(this).find(child).text();
-                texts.push(text);
-            });
-        }
-    });
+function crawl(URL, parent, child) {
+    return new Promise(function (resolve, reject) {
+        var texts = [];
+        request(URL, function (err, res, body) {
+            if (err) {
+                console.log("an error occured : " + err);
+                reject();
+            }
+            else {
+                let $ = cheerio.load(body); //loading content of HTML body
+                $(parent).each(function (index) {
+                    var text = $(this).find(child).text();
+                    texts.push(text);
+                });
 
-    npl(texts);
+                npl(texts);
+                resolve();
+            }
+        });
+
+    })
 }
 
 async function npl(texts) {
@@ -47,12 +52,12 @@ async function npl(texts) {
     // Instantiates a client
     const client = new language.LanguageServiceClient();
 
-    for (text of texts){
+    for (text of texts) {
         const document = {
             content: text,
             type: 'PLAIN_TEXT',
         };
-    
+
         // Detects the sentiment of the text
         const [result] = await client.analyzeSentiment({ document: document });
         const sentiment = result.documentSentiment;
@@ -61,9 +66,15 @@ async function npl(texts) {
         console.log(`Sentiment score: ${sentiment.score}`);
         console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
         console.log('\n');
+
+        // post to firebase?
     }
 }
 
-for (crawler of crawlers){
-    crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
+async function main(){
+    for (crawler of crawlers) {
+        let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
+    }
 }
+
+main();

@@ -22,4 +22,3 @@ class WordCloud extends React.Component {
 }
 
 export default WordCloud;
-

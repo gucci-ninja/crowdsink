@@ -14,7 +14,7 @@ class Header extends React.Component {
 
    componentDidMount() {
       db.collection('companies')
-        .doc('jet blue')
+        .doc('JetBlue')
         .onSnapshot((snap) => {
           this.setState({
             name: snap.data().name
@@ -30,9 +30,11 @@ class Header extends React.Component {
                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="mr-auto">
-                     <Nav.Link href="#home">Home</Nav.Link>
                      <Nav.Link href="#hypothesis">Our Hypothesis</Nav.Link>
                      <Nav.Link href="#demo">Demo</Nav.Link>
+                     <Nav.Link href="#info">More Information</Nav.Link>
+                     
+                     
                   </Nav>
                </Navbar.Collapse>
             </Navbar>

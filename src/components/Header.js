@@ -14,7 +14,7 @@ class Header extends React.Component {
 
    componentDidMount() {
       db.collection('companies')
-        .doc('jet blue')
+        .doc('JetBlue')
         .onSnapshot((snap) => {
           this.setState({
             name: snap.data().name

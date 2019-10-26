@@ -1,5 +1,9 @@
 import React from "react";
 import WordCloudd from "react-d3-cloud";
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
+import Button from 'react-bootstrap/Button';
+import db from '../config';
 
 
 const data = [
@@ -14,11 +18,34 @@ const fontSizeMapper = word => Math.log2(word.value) * 5;
 const rotate = () => Math.random() > 0.5 ? 90 : 0;
 
 class WordCloud extends React.Component {
-    render(){
-        return(
-            <WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} />
-        )
-    }
+  constructor() {
+    super()
+    this.doStuff = this.doStuff.bind(this);
+  }
+  doStuff() {
+    console.log('stufff');
+    window.location.reload();
+    // this is where we will write to the database
+
+  }
+  render(){
+    return(
+      <div class="container">
+      <InputGroup className="mb-3">
+        <FormControl
+        placeholder="Thing"
+        aria-label="company"
+        aria-describedby="basic-addon2"
+        size="lg"
+        />
+        <InputGroup.Append>
+        <Button variant="primary" size="lg" onClick={this.doStuff}>Go</Button>
+        </InputGroup.Append>
+      </InputGroup>
+      <WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} />
+    </div>
+    )        
+  }
 }
 
 export default WordCloud;

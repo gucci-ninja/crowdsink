@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
+    "request": "^2.88.0",
     "twitter": "^1.7.1"
   },
   "scripts": {
@@ -40,5 +42,6 @@
   "bugs": {
     "url": "https://github.com/gucci-ninja/crowdsink/issues"
   },
-  "homepage": "https://github.com/gucci-ninja/crowdsink#readme"
+  "homepage": "https://github.com/gucci-ninja/crowdsink#readme",
+  "devDependencies": {}
 }

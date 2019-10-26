@@ -14,14 +14,17 @@ const crawlers = [
         parentCrawl: 'article.list-item',
         childCrawl: 'div.text_content'
     },
-    {
-
-    }
+    // {
+    //     source: 'Yelp',
+    //     url: '',
+    //     parentCrawl: '',
+    //     childCrawl: ''
+    // }
 ]
 
-function crawl(URL, parent, child) {
+async function crawl(URL, parent, child) {
     var texts = [];
-    request(URL, function (err, res, body) {
+    await request(URL, function (err, res, body) {
         if (err) {
             console.log("an error occured : " + err);
         }
@@ -29,15 +32,38 @@ function crawl(URL, parent, child) {
             let $ = cheerio.load(body); //loading content of HTML body
             $(parent).each(function (index) {
                 var text = $(this).find(child).text();
-                
-                // call sentiment function?
-                
-
-                // replace with writing to database.
-
                 texts.push(text);
             });
         }
     });
-    return texts;
+
+    npl(texts);
+}
+
+async function npl(texts) {
+    // Imports the Google Cloud client library
+    const language = require('@google-cloud/language');
+
+    // Instantiates a client
+    const client = new language.LanguageServiceClient();
+
+    for (text of texts){
+        const document = {
+            content: text,
+            type: 'PLAIN_TEXT',
+        };
+    
+        // Detects the sentiment of the text
+        const [result] = await client.analyzeSentiment({ document: document });
+        const sentiment = result.documentSentiment;
+
+        console.log(`Text: ${text}`);
+        console.log(`Sentiment score: ${sentiment.score}`);
+        console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+        console.log('\n');
+    }
+}
+
+for (crawler of crawlers){
+    crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
 }

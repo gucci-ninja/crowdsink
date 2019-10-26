@@ -7,7 +7,6 @@ const testRoute = require("./routes/test");
 
 console.log("starting server.js");
 
-
 router.use(cors());
 
 // routes go here
@@ -27,9 +26,18 @@ app.get("/", (req, res) => {
   res.render("App.js");
 });
 
-app.use('/api', testRoute);
-app.use(express.static('src'));
-app.set('src', __dirname + 'src');
+// get reviews from social medias
+router.get('/get/:socialMedia/reivew', (req, res) => {
+  a = [] // array of reviews
+  let obj =
+    db.collection('companies')
+      .doc(req.param.socialMedia)
+      .collection('reviews')
+      .onSnapshot(snap.docs) // querysnapshot of array eg. (3) [QueryDocumentSnapshot, QueryDocumentSnapshot, QueryDocumentSnapshot]
+  req.setEncoding(obj);
+})
+
+// app.use('/api', testRoute);
 
 // creating a server
 app.listen(3000, function () {

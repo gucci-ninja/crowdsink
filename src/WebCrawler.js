@@ -2,10 +2,15 @@ const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+const { IamAuthenticator } = require('ibm-watson/auth');
+require('dotenv').config();
 
 const nlu = new NaturalLanguageUnderstandingV1({
-    version: '2018-04-05',
-    url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
+  version: '2019-07-12',
+  authenticator: new IamAuthenticator({
+    apikey: process.env.NATURAL_LANGUAGE_UNDERSTANDING_APIKEY,
+  }),
+  url: 'https://gateway-wdc.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2019-07-12'
 });
 
 const crawlers = [
@@ -60,7 +65,7 @@ async function nlp(texts) {
     // Instantiates a client
     const client = new language.LanguageServiceClient();
 
-    for (text of texts) {
+    for (var text of texts) {
         const document = {
             content: text,
             type: 'PLAIN_TEXT',

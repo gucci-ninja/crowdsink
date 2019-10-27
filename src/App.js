@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Hypothesis from './components/Hypothesis';
 import Info from './components/Info';
 import 'bootstrap/dist/css/bootstrap.min.css';
+require('dotenv').config();
 
 function App() {
   return (

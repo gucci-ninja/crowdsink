@@ -4,7 +4,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import db from '../config';
-import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import * as WebCrawler from '../WebCrawler.js';
@@ -69,6 +68,7 @@ class WordCloud extends React.Component {
       let res = WebCrawler.crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl).then(response =>{
         console.log(response);
       });
+      console.log(res);
       // await setTimeout(() => {
       // }, 3000);
     }

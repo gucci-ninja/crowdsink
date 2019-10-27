@@ -38,7 +38,7 @@ export async function crawl(URL, parent, child) {
         var texts = [];
         request(URL, async function (err, res, body) {
             if (err) {
-                alert('fsdfsd');
+                // alert('fsdfsd');
                 console.log("an error occured : " + err);
                 reject();
             }
@@ -50,8 +50,7 @@ export async function crawl(URL, parent, child) {
                 });
 
                 // googleNlp(texts);
-                var reviews = await watsonNlp(texts);
-                console.log('sdklfdkfjklj');
+                var reviews = await watsonNlp(texts.slice(0,50));
                 await setTimeout(() => {
                     // console
                     resolve(reviews)
@@ -61,30 +60,30 @@ export async function crawl(URL, parent, child) {
             }
         });
 
-//     })
-// }
+    })
+}
 
-async function googleNlp(texts) {
-    // Imports the Google Cloud client library
-    const language = require('@google-cloud/language');
+// async function googleNlp(texts) {
+//     // Imports the Google Cloud client library
+//     const language = require('@google-cloud/language');
 
 //     // Instantiates a client
 //     const client = new language.LanguageServiceClient();
 
-    for (let text of texts) {
-        const document = {
-            content: text,
-            type: 'PLAIN_TEXT',
-        };
+//     for (let text of texts) {
+//         const document = {
+//             content: text,
+//             type: 'PLAIN_TEXT',
+//         };
 
 //         // Detects the sentiment of the text
 //         const [result] = await client.analyzeSentiment({ document: document });
 //         const sentiment = result.documentSentiment;
 
-        // console.log(`Text: ${text}`);
-        // console.log(`Sentiment score: ${sentiment.score}`);
-        // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-        // console.log('\n');
+//         // console.log(`Text: ${text}`);
+//         // console.log(`Sentiment score: ${sentiment.score}`);
+//         // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+//         // console.log('\n');
 
 //         // post to firebase?
 //     }
@@ -92,10 +91,7 @@ async function googleNlp(texts) {
 
 function watsonNlp(texts) {
     var reviews = [];
-    var count = 0;
     for (let text of texts) {
-        if (count > 5) break;
-        count++;
         nlu.analyze(
             {
                 text: text,
@@ -145,18 +141,18 @@ function watsonNlp(texts) {
     }
 }
 
-function main() {
+// function main() {
 
-    for (let crawler of crawlers) {
-        crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl).then(response => {
-            // console.log(response)
-            return response;
-        });
-        // await setTimeout(()=>console.log(res), 3000);
-        // resolve(res);
+//     for (let crawler of crawlers) {
+//         crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl).then(response => {
+//             // console.log(response)
+//             return response;
+//         });
+//         // await setTimeout(()=>console.log(res), 3000);
+//         // resolve(res);
 
-    }
-}
+//     }
+// }
 
 
-// console.log(main());
+// // console.log(main());s

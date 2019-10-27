@@ -3,6 +3,8 @@ import './App.css';
 import WordCloud from './components/WordCloud';
 import Header from './components/Header';
 import Hypothesis from './components/Hypothesis';
+import Button from './components/InputForm';
+import Chart from './components/Chart';
 import Info from './components/Info';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,10 +17,28 @@ function App() {
       <br></br>
       {/* <section id="hypothesis"><Hypothesis></Hypothesis></section> */}
       <section id="demo">
-        <WordCloud></WordCloud>
+        <div class="container-fluid">
+          <div class="row">
+            <Button company="Delta Airlines"></Button>
+            <Button company="Air Canada"></Button>
+            <Button company="JetBlue"></Button>
+            <Button company="ETC"></Button>
+          </div>
+          <br></br>
+          <WordCloud></WordCloud>
+          <div class="row graphs">
+            <Chart title="Sadness" val="80"></Chart>
+            <Chart title="Joy" val="70"></Chart>
+            <Chart title="Fear" val="40"></Chart>
+            <Chart title="Disgust" val="30"></Chart>
+            <Chart title="Anger" val="20"></Chart>
+          </div>
+        </div>
       </section>
+      <br></br>
+      <br></br>
       <Info></Info>
-      
+
     </div>
   );
 }

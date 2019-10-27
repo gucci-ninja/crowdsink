@@ -1,9 +1,17 @@
-
-const db = require('./config.js');
 const request = require('request');
 const cheerio = require('cheerio');
-const fs = require('fs');
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+const { IamAuthenticator } = require('ibm-watson/auth');
+
+require('dotenv').config();
+const nlu = new NaturalLanguageUnderstandingV1({
+    version: '2019-07-12',
+    authenticator: new IamAuthenticator({
+      apikey: process.env.NATURAL_LANGUAGE_UNDERSTANDING_APIKEY,
+    }),
+    url: 'https://gateway-wdc.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2019-07-12'
+  });
+
 
 const crawlers = [
     {
@@ -43,7 +51,6 @@ function crawl(URL, parent, child) {
 
                 // googleNlp(texts);
                 var reviews = watsonNlp(texts);
-                addData("JetBlue", reviews)
                 resolve();
             }
         });
@@ -138,44 +145,7 @@ async function main(){
     }
 }
 
-// get data of a company collection
-async function getData(company) {
-    db.collection('companies')
-        .doc(company)
-        .collection('reviews')
-        .onSnapshot((snap) => {
-            console.log(snap.docs); //querysnapshot of array
-            snap.forEach((s) => {
-                console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
-            })
-        });
-}
-
-// add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
-async function addData(company, arr) {
-    for (let review of arr) {
-        db.collection('companies')
-            .doc(company)
-            .collection('reviews')
-            .add(
-                {
-                    sentiment: review.sentiment,
-                    text: review.text,
-                    emotion: review.emotion,
-                    keywords: review.keywords
-                }
-            )
-    }
-    getData('JetBlue');
-}
-
-const nlu = new NaturalLanguageUnderstandingV1({
-    version: '2018-04-05',
-    url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
-});
-
-
 
 main();
 
-export default main;
+// export default main;

@@ -7,9 +7,10 @@ import db from '../config';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import WebCrawler from '../WebCrawler.js';
-import FadeIn from 'react-fade-in';
+import * as WebCrawler from '../WebCrawler.js';
 
+// import * as utils from './utils.js'; 
+import FadeIn from 'react-fade-in';
 const data = [
   { text: "Hey", value: 1000 },
   { text: "lol", value: 200 },

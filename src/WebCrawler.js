@@ -2,8 +2,8 @@ const request = require('request');
 const cheerio = require('cheerio');
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 const { IamAuthenticator } = require('ibm-watson/auth');
-
 require('dotenv').config();
+
 const nlu = new NaturalLanguageUnderstandingV1({
     version: '2019-07-12',
     authenticator: new IamAuthenticator({
@@ -13,7 +13,7 @@ const nlu = new NaturalLanguageUnderstandingV1({
   });
 
 
-const crawlers = [
+export const crawlers = [
     {
         source: 'Twitter',
         url: 'https://twitter.com/hashtag/jetblue?src=hash',
@@ -28,19 +28,13 @@ const crawlers = [
     },
     // {
     //     source: 'Yelp',
-    //     url: 'https://www.yelp.com/biz/jetblue-airways-new-york',
-    //     parentCrawl: 'div.review',
-    //     childCrawl: 'p'
-    // },
-    // {
-    //     source: 'TripAdvisor',
-    //     url: 'https://www.tripadvisor.com/Airline_Review-d8729099-Reviews-JetBlue',
-    //     parentCrawl: 'div.class=location-review-card-Card__ui_card--2Mri0 location-review-card-Card__card',
-    //     childCrawl: 'q.class'
+    //     url: '',
+    //     parentCrawl: '',
+    //     childCrawl: ''
     // }
 ]
 
-function crawl(URL, parent, child) {
+export function crawl(URL, parent, child) {
     return new Promise(function (resolve, reject) {
         var texts = [];
         request(URL, function (err, res, body) {
@@ -133,6 +127,7 @@ function watsonNlp(texts) {
                     text: analyzed_text
                 };
                 reviews.push(review);
+
                 // console.log(JSON.stringify(review, null, 2));
                 // console.log('\n');
                 
@@ -152,5 +147,3 @@ async function main(){
 
 
 main();
-
-export default crawl;

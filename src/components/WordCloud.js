@@ -4,6 +4,9 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
 import db from '../config';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 // import WebCrawler from '../WebCrawler.js';
 import FadeIn from 'react-fade-in';
 
@@ -45,7 +48,7 @@ class WordCloud extends React.Component {
 
   // add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
   addData = async (company, arr) => {
-    for (let review of arr) {
+    for (var review of arr) {
       db.collection('companies')
         .doc(company)
         .collection('reviews')

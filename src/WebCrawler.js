@@ -44,7 +44,7 @@ function crawl(URL, parent, child) {
                     texts.push(text);
                 });
 
-                // nlp(texts);
+                // googleNlp(texts);
                 watsonNlp(texts);
                 resolve();
             }
@@ -53,7 +53,7 @@ function crawl(URL, parent, child) {
     })
 }
 
-async function nlp(texts) {
+async function googleNlp(texts) {
     // Imports the Google Cloud client library
     const language = require('@google-cloud/language');
 
@@ -76,12 +76,6 @@ async function nlp(texts) {
         console.log('\n');
 
         // post to firebase?
-    }
-}
-
-async function main(){
-    for (crawler of crawlers) {
-        let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
     }
 }
 
@@ -118,6 +112,7 @@ function watsonNlp(texts) {
                 var analyzed_text = result.analyzed_text;
 
                 let analysis = {
+                    airline: 'JetBlue',
                     sentiment: sentiment,
                     keywords: keywords,
                     emotion: emotion,
@@ -126,10 +121,18 @@ function watsonNlp(texts) {
 
                 console.log(JSON.stringify(analysis, null, 2));
                 console.log('\n');
+
+                // write to firebase
             })
             .catch(err => {
                 console.log('error: ', err);
             });
+    }
+}
+
+async function main(){
+    for (crawler of crawlers) {
+        let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
     }
 }
 

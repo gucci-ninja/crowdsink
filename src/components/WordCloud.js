@@ -5,11 +5,15 @@ import db from '../config';
 import FadeIn from 'react-fade-in';
 
 const data = [
-  { text: "Hey", value: 1000 },
-  { text: "lol", value: 200 },
-  { text: "first impression", value: 800 },
-  { text: "very cool", value: 1000000 },
-  { text: "duck", value: 10 }
+  { text: "Quick Service", value: 1000 },
+  { text: "delay", value: 100000 },
+  { text: "Comfort", value: 800 },
+  { text: "courteous", value: 100000 },
+  { text: "Rude", value: 500 },
+  { text: "Airport", value: 10000 },
+  { text: "cancel", value: 100000 },
+  { text: "Customer Service", value: 100000 },
+  { text: "Food", value: 1000 }
 ];
 
 const fontSizeMapper = word => Math.log2(word.value) * 5;

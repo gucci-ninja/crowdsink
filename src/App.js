@@ -22,12 +22,12 @@ function App() {
             <Button company="Delta Airlines"></Button>
             <Button company="Air Canada"></Button>
             <Button company="JetBlue"></Button>
-            <Button company="ETC"></Button>
+            <Button company="West Jet"></Button>
           </div>
           <br></br>
           <WordCloud></WordCloud>
           <div class="row graphs">
-            <Chart title="Sadness" val="80"></Chart>
+            <Chart title="Sadness" val="320"></Chart>
             <Chart title="Joy" val="70"></Chart>
             <Chart title="Fear" val="40"></Chart>
             <Chart title="Disgust" val="30"></Chart>

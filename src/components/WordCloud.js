@@ -47,25 +47,21 @@ class WordCloud extends React.Component {
   }
 
   // add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
-  addData = async (company, arr) => {
-    // const reviews = arr.map((obj)=> {return Object.assign({}, obj)});
-    try {
-      for (var review of arr) {
-        const r = {
-          sentiment: review[0],
-          text: review[1],
-          emotion: review[2],
-          keywords: review[3]
-        }
-        db.collection('companies').doc(company).collection('reviews').add(r);
-      }
-    }catch(e) {
-      console.log('fuck'); 
-   }
+  addData = async (company, obj) => {
+    db.collection('companies')
+      .doc(company)
+      .collection('reviews')
+      .add(obj)
     this.getData('JetBlue');
   }
+
   componentDidMount() {
-    this.addData('JetBlue', [3.2, 'holy shit it lit', {'happiness':1.2,'sadness':0.3}, 'keyword,1,2,3'])
+    this.addData('JetBlue', {
+      sentiment: 0.2,
+      text: 'akfnaoicdhwopfjqoiwf',
+      emotion: { 'happiness': 1.2, 'sadness': 0.3 },
+      keywords: 'keyword,1,2,3'
+    });
     this.getData('JetBlue');
     console.log("we good");
   }

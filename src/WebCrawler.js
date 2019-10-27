@@ -1,17 +1,5 @@
 const request = require('request');
 const cheerio = require('cheerio');
-const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
-const { IamAuthenticator } = require('ibm-watson/auth');
-
-require('dotenv').config();
-const nlu = new NaturalLanguageUnderstandingV1({
-    version: '2019-07-12',
-    authenticator: new IamAuthenticator({
-      apikey: process.env.NATURAL_LANGUAGE_UNDERSTANDING_APIKEY,
-    }),
-    url: 'https://gateway-wdc.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2019-07-12'
-  });
-
 
 const crawlers = [
     {
@@ -28,9 +16,15 @@ const crawlers = [
     },
     // {
     //     source: 'Yelp',
-    //     url: '',
-    //     parentCrawl: '',
-    //     childCrawl: ''
+    //     url: 'https://www.yelp.com/biz/jetblue-airways-new-york',
+    //     parentCrawl: 'div.review',
+    //     childCrawl: 'p'
+    // },
+    // {
+    //     source: 'TripAdvisor',
+    //     url: 'https://www.tripadvisor.com/Airline_Review-d8729099-Reviews-JetBlue',
+    //     parentCrawl: 'div.class=location-review-card-Card__ui_card--2Mri0 location-review-card-Card__card',
+    //     childCrawl: 'q.class'
     // }
 ]
 
@@ -49,8 +43,7 @@ function crawl(URL, parent, child) {
                     texts.push(text);
                 });
 
-                // googleNlp(texts);
-                var reviews = watsonNlp(texts);
+                nlp(texts);
                 resolve();
             }
         });
@@ -58,7 +51,7 @@ function crawl(URL, parent, child) {
     })
 }
 
-async function googleNlp(texts) {
+async function nlp(texts) {
     // Imports the Google Cloud client library
     const language = require('@google-cloud/language');
 
@@ -84,68 +77,12 @@ async function googleNlp(texts) {
     }
 }
 
-function watsonNlp(texts) {
-    var reviews = [];
-    var count = 0;
-    for (let text of texts) {
-        if (count > 5) break;
-        count++;
-        nlu.analyze(
-            {
-                text: text,
-                features: {
-                    keywords: {
-                    },
-                    emotion: {
-                    },
-                    sentiment: {
-                    }
-                },
-                returnAnalyzedText: true,
-            })
-            .then(response => {
-                var result = response.result;
-
-                var sentiment = result.sentiment.document.score;
-
-                var keywordResults = result.keywords;
-                var keywords = [];
-                for (let keyword of keywordResults) {
-                    var relevance = keyword.relevance;
-                    if (relevance > 0.45) {
-                        keywords.push(keyword.text);
-                    }
-                }
-
-                var emotion = result.emotion.document.emotion;
-                var analyzed_text = result.analyzed_text;
-
-                let review = {
-                    sentiment: sentiment,
-                    keywords: keywords,
-                    emotion: emotion,
-                    text: analyzed_text
-                };
-                reviews.push(review);
-
-                // console.log(JSON.stringify(review, null, 2));
-                // console.log('\n');
-                
-            })
-            .catch(err => {
-                console.log('error: ', err);
-            });
-        return reviews;
-    }
-}
-
 async function main(){
     for (let crawler of crawlers) {
         let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
     }
 }
 
-
 main();
 
-// export default main;
+export default main;

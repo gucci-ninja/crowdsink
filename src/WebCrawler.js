@@ -2,6 +2,38 @@ const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+import db from './config';
+
+// get data of a company collection
+async function getData(company) {
+    db.collection('companies')
+        .doc(company)
+        .collection('reviews')
+        .onSnapshot((snap) => {
+            console.log(snap.docs); //querysnapshot of array
+            snap.forEach((s) => {
+                console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
+            })
+        });
+}
+
+// add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
+async function addData(company, arr) {
+    for (let review of arr) {
+        db.collection('companies')
+            .doc(company)
+            .collection('reviews')
+            .add(
+                {
+                    sentiment: review[0],
+                    text: review[1],
+                    emotion: review[2],
+                    keywords: review[3]
+                }
+            )
+    }
+    getData('JetBlue');
+}
 
 const nlu = new NaturalLanguageUnderstandingV1({
     version: '2018-04-05',
@@ -79,7 +111,7 @@ async function nlp(texts) {
     }
 }
 
-async function main(){
+async function main() {
     for (crawler of crawlers) {
         let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
     }

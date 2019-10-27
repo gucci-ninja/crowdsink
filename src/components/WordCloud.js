@@ -39,11 +39,8 @@ class WordCloud extends React.Component {
       .onSnapshot((snap) => {
         console.log(snap.docs); //querysnapshot of array
         snap.forEach((s) => {
-          console.log(s.get('sentiment') + ":" + s.get('text'))
+          console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
         })
-        // this.setState({
-        //    name: snap.data().text
-        // })
       });
   }
 
@@ -56,7 +53,9 @@ class WordCloud extends React.Component {
         .add(
           {
             sentiment: review[0],
-            text: review[1]
+            text: review[1],
+            emotion: review[2],
+            keywords: review[3]
           }
         )
     }
@@ -64,7 +63,7 @@ class WordCloud extends React.Component {
   }
 
   componentDidMount() {
-    // this.addData('JetBlue', [[3.2, 'holy shit it lit'], [0.1, 'suck ass xd']])
+    this.addData('JetBlue', [3.2, 'holy shit it lit', {'happiness':1.2,'sadness':0.3}, 'keyword,1,2,3'])
     this.getData('JetBlue');
   }
 

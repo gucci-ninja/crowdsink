@@ -28,9 +28,15 @@ const crawlers = [
     },
     // {
     //     source: 'Yelp',
-    //     url: '',
-    //     parentCrawl: '',
-    //     childCrawl: ''
+    //     url: 'https://www.yelp.com/biz/jetblue-airways-new-york',
+    //     parentCrawl: 'div.review',
+    //     childCrawl: 'p'
+    // },
+    // {
+    //     source: 'TripAdvisor',
+    //     url: 'https://www.tripadvisor.com/Airline_Review-d8729099-Reviews-JetBlue',
+    //     parentCrawl: 'div.class=location-review-card-Card__ui_card--2Mri0 location-review-card-Card__card',
+    //     childCrawl: 'q.class'
     // }
 ]
 
@@ -127,7 +133,6 @@ function watsonNlp(texts) {
                     text: analyzed_text
                 };
                 reviews.push(review);
-
                 // console.log(JSON.stringify(review, null, 2));
                 // console.log('\n');
                 
@@ -148,4 +153,4 @@ async function main(){
 
 main();
 
-// export default main;
+export default crawl;

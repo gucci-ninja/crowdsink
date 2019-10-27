@@ -7,7 +7,7 @@ import db from '../config';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-// import WebCrawler from '../WebCrawler.js';
+import WebCrawler from '../WebCrawler.js';
 import FadeIn from 'react-fade-in';
 
 const data = [
@@ -55,7 +55,12 @@ class WordCloud extends React.Component {
     this.getData('JetBlue');
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    for (let crawler of WebCrawler.crawlers) {
+      let res = await WebCrawler.crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
+    }
+    console.log("we good");
+
     this.addData('JetBlue', {
       sentiment: 0.2,
       text: 'akfnaoicdhwopfjqoiwf',
@@ -63,7 +68,7 @@ class WordCloud extends React.Component {
       keywords: 'keyword,1,2,3'
     });
     this.getData('JetBlue');
-    console.log("we good");
+    
   }
 
   render() {

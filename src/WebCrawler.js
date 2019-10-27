@@ -1,44 +1,9 @@
+
+const db = require('./config.js');
 const request = require('request');
 const cheerio = require('cheerio');
 const fs = require('fs');
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
-import db from './config';
-
-// get data of a company collection
-async function getData(company) {
-    db.collection('companies')
-        .doc(company)
-        .collection('reviews')
-        .onSnapshot((snap) => {
-            console.log(snap.docs); //querysnapshot of array
-            snap.forEach((s) => {
-                console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
-            })
-        });
-}
-
-// add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
-async function addData(company, arr) {
-    for (let review of arr) {
-        db.collection('companies')
-            .doc(company)
-            .collection('reviews')
-            .add(
-                {
-                    sentiment: review[0],
-                    text: review[1],
-                    emotion: review[2],
-                    keywords: review[3]
-                }
-            )
-    }
-    getData('JetBlue');
-}
-
-const nlu = new NaturalLanguageUnderstandingV1({
-    version: '2018-04-05',
-    url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
-});
 
 const crawlers = [
     {
@@ -77,7 +42,8 @@ function crawl(URL, parent, child) {
                 });
 
                 // googleNlp(texts);
-                watsonNlp(texts);
+                var reviews = watsonNlp(texts);
+                addData("JetBlue", reviews)
                 resolve();
             }
         });
@@ -92,7 +58,7 @@ async function googleNlp(texts) {
     // Instantiates a client
     const client = new language.LanguageServiceClient();
 
-    for (text of texts) {
+    for (let text of texts) {
         const document = {
             content: text,
             type: 'PLAIN_TEXT',
@@ -112,7 +78,11 @@ async function googleNlp(texts) {
 }
 
 function watsonNlp(texts) {
-    for (text of texts) {
+    var reviews = [];
+    var count = 0;
+    for (let text of texts) {
+        if (count > 5) break;
+        count++;
         nlu.analyze(
             {
                 text: text,
@@ -133,7 +103,7 @@ function watsonNlp(texts) {
 
                 var keywordResults = result.keywords;
                 var keywords = [];
-                for (keyword of keywordResults) {
+                for (let keyword of keywordResults) {
                     var relevance = keyword.relevance;
                     if (relevance > 0.45) {
                         keywords.push(keyword.text);
@@ -143,29 +113,69 @@ function watsonNlp(texts) {
                 var emotion = result.emotion.document.emotion;
                 var analyzed_text = result.analyzed_text;
 
-                let analysis = {
-                    airline: 'JetBlue',
+                let review = {
                     sentiment: sentiment,
                     keywords: keywords,
                     emotion: emotion,
-                    analyzed_text: analyzed_text
+                    text: analyzed_text
                 };
+                reviews.push(review);
 
-                console.log(JSON.stringify(analysis, null, 2));
-                console.log('\n');
-
-                // write to firebase
+                // console.log(JSON.stringify(review, null, 2));
+                // console.log('\n');
+                
             })
             .catch(err => {
                 console.log('error: ', err);
             });
+        return reviews;
     }
 }
 
 async function main(){
-    for (crawler of crawlers) {
+    for (let crawler of crawlers) {
         let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
     }
 }
 
+// get data of a company collection
+async function getData(company) {
+    db.collection('companies')
+        .doc(company)
+        .collection('reviews')
+        .onSnapshot((snap) => {
+            console.log(snap.docs); //querysnapshot of array
+            snap.forEach((s) => {
+                console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
+            })
+        });
+}
+
+// add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
+async function addData(company, arr) {
+    for (let review of arr) {
+        db.collection('companies')
+            .doc(company)
+            .collection('reviews')
+            .add(
+                {
+                    sentiment: review.sentiment,
+                    text: review.text,
+                    emotion: review.emotion,
+                    keywords: review.keywords
+                }
+            )
+    }
+    getData('JetBlue');
+}
+
+const nlu = new NaturalLanguageUnderstandingV1({
+    version: '2018-04-05',
+    url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
+});
+
+
+
 main();
+
+export default main;

@@ -3,10 +3,14 @@ import WordCloudd from "react-d3-cloud";
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-// import db from '../config';
-// import WebCrawler from '../WebCrawler.js';
-import FadeIn from 'react-fade-in';
+import db from '../config';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import * as WebCrawler from '../WebCrawler.js';
 
+// import * as utils from './utils.js'; 
+import FadeIn from 'react-fade-in';
 const data = [
   { text: "Hey", value: 1000 },
   { text: "lol", value: 200 },
@@ -34,7 +38,6 @@ class WordCloud extends React.Component {
   doStuff() {
     console.log('stufff');
     window.location.reload();
-
     // this is where we will write to the database ussing db object and WebCrawler object
 
   }
@@ -45,35 +48,40 @@ class WordCloud extends React.Component {
       .doc(company)
       .collection('reviews')
       .onSnapshot((snap) => {
-        console.log(snap.docs); //querysnapshot of array
-        snap.forEach((s) => {
-          console.log(s.get('sentiment') + ":" + s.get('text'))
-        })
-        // this.setState({
-        //    name: snap.data().text
+        // console.log(snap.docs); //querysnapshot of array
+        // snap.forEach((s) => {
+        //   console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
         // })
       });
   }
 
   // add array [[,],[,],[,],[,],..] of reviews to a company collection [{,},{,},{,},..]
-  addData = async (company, arr) => {
-    for (let review of arr) {
-      db.collection('companies')
-        .doc(company)
-        .collection('reviews')
-        .add(
-          {
-            sentiment: review[0],
-            text: review[1]
-          }
-        )
-    }
+  addData = async (company, obj) => {
+    db.collection('companies')
+      .doc(company)
+      .collection('reviews')
+      .add(obj)
     this.getData('JetBlue');
   }
 
   componentDidMount() {
-    // this.addData('JetBlue', [[3.2, 'holy shit it lit'], [0.1, 'suck ass xd']])
+    for (let crawler of WebCrawler.crawlers) {
+      let res = WebCrawler.crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl).then(response =>{
+        console.log(response);
+      });
+      // await setTimeout(() => {
+      // }, 3000);
+    }
+    console.log("we good");
+
+    this.addData('JetBlue', {
+      sentiment: 0.2,
+      text: 'akfnaoicdhwopfjqoiwf',
+      emotion: { 'happiness': 1.2, 'sadness': 0.3 },
+      keywords: 'keyword,1,2,3'
+    });
     this.getData('JetBlue');
+    
   }
 
   render() {

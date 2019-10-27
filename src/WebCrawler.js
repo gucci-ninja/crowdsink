@@ -1,5 +1,12 @@
 const request = require('request');
 const cheerio = require('cheerio');
+const fs = require('fs');
+const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
+
+const nlu = new NaturalLanguageUnderstandingV1({
+    version: '2018-04-05',
+    url: 'https://gateway.watsonplatform.net/natural-language-understanding/api/'
+});
 
 const crawlers = [
     {
@@ -37,7 +44,8 @@ function crawl(URL, parent, child) {
                     texts.push(text);
                 });
 
-                nlp(texts);
+                // nlp(texts);
+                watsonNlp(texts);
                 resolve();
             }
         });
@@ -74,6 +82,54 @@ async function nlp(texts) {
 async function main(){
     for (crawler of crawlers) {
         let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
+    }
+}
+
+function watsonNlp(texts) {
+    for (text of texts) {
+        nlu.analyze(
+            {
+                text: text,
+                features: {
+                    keywords: {
+                    },
+                    emotion: {
+                    },
+                    sentiment: {
+                    }
+                },
+                returnAnalyzedText: true,
+            })
+            .then(response => {
+                var result = response.result;
+
+                var sentiment = result.sentiment.document.score;
+
+                var keywordResults = result.keywords;
+                var keywords = [];
+                for (keyword of keywordResults) {
+                    var relevance = keyword.relevance;
+                    if (relevance > 0.45) {
+                        keywords.push(keyword.text);
+                    }
+                }
+
+                var emotion = result.emotion.document.emotion;
+                var analyzed_text = result.analyzed_text;
+
+                let analysis = {
+                    sentiment: sentiment,
+                    keywords: keywords,
+                    emotion: emotion,
+                    analyzed_text: analyzed_text
+                };
+
+                console.log(JSON.stringify(analysis, null, 2));
+                console.log('\n');
+            })
+            .catch(err => {
+                console.log('error: ', err);
+            });
     }
 }
 

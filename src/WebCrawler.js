@@ -2,16 +2,15 @@ const request = require('request');
 const cheerio = require('cheerio');
 const NaturalLanguageUnderstandingV1 = require('ibm-watson/natural-language-understanding/v1');
 const { IamAuthenticator } = require('ibm-watson/auth');
-require('dotenv').config();
+
 
 const nlu = new NaturalLanguageUnderstandingV1({
     version: '2019-07-12',
     authenticator: new IamAuthenticator({
-      apikey: process.env.NATURAL_LANGUAGE_UNDERSTANDING_APIKEY,
+        apikey: APIKEY
     }),
     url: 'https://gateway-wdc.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2019-07-12'
-  });
-
+});
 
 export const crawlers = [
     {
@@ -34,11 +33,12 @@ export const crawlers = [
     // }
 ]
 
-export function crawl(URL, parent, child) {
+export async function crawl(URL, parent, child) {
     return new Promise(function (resolve, reject) {
         var texts = [];
-        request(URL, function (err, res, body) {
+        request(URL, async function (err, res, body) {
             if (err) {
+                alert('fsdfsd');
                 console.log("an error occured : " + err);
                 reject();
             }
@@ -50,8 +50,14 @@ export function crawl(URL, parent, child) {
                 });
 
                 // googleNlp(texts);
-                var reviews = watsonNlp(texts);
-                resolve();
+                var reviews = await watsonNlp(texts);
+                console.log('sdklfdkfjklj');
+                await setTimeout(() => {
+                    // console
+                    resolve(reviews)
+                }, 3000);
+
+
             }
         });
 
@@ -75,10 +81,10 @@ async function googleNlp(texts) {
         const [result] = await client.analyzeSentiment({ document: document });
         const sentiment = result.documentSentiment;
 
-        console.log(`Text: ${text}`);
-        console.log(`Sentiment score: ${sentiment.score}`);
-        console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
-        console.log('\n');
+        // console.log(`Text: ${text}`);
+        // console.log(`Sentiment score: ${sentiment.score}`);
+        // console.log(`Sentiment magnitude: ${sentiment.magnitude}`);
+        // console.log('\n');
 
         // post to firebase?
     }
@@ -130,7 +136,7 @@ function watsonNlp(texts) {
 
                 // console.log(JSON.stringify(review, null, 2));
                 // console.log('\n');
-                
+
             })
             .catch(err => {
                 console.log('error: ', err);
@@ -139,11 +145,18 @@ function watsonNlp(texts) {
     }
 }
 
-async function main(){
+function main() {
+
     for (let crawler of crawlers) {
-        let res = await crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
+        crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl).then(response => {
+            // console.log(response)
+            return response;
+        });
+        // await setTimeout(()=>console.log(res), 3000);
+        // resolve(res);
+
     }
 }
 
 
-main();
+// console.log(main());

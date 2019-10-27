@@ -40,10 +40,10 @@ class WordCloud extends React.Component {
       .doc(company)
       .collection('reviews')
       .onSnapshot((snap) => {
-        console.log(snap.docs); //querysnapshot of array
-        snap.forEach((s) => {
-          console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
-        })
+        // console.log(snap.docs); //querysnapshot of array
+        // snap.forEach((s) => {
+        //   console.log(s.get('sentiment'), s.get('text'), s.get('emotion'), s.get('keywords'));
+        // })
       });
   }
 
@@ -56,9 +56,13 @@ class WordCloud extends React.Component {
     this.getData('JetBlue');
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     for (let crawler of WebCrawler.crawlers) {
-      let res = await WebCrawler.crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl);
+      let res = WebCrawler.crawl(crawler.url, crawler.parentCrawl, crawler.childCrawl).then(response =>{
+        console.log(response);
+      });
+      // await setTimeout(() => {
+      // }, 3000);
     }
     console.log("we good");
 

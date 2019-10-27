@@ -1,6 +1,7 @@
 import React from "react";
 import Button from 'react-bootstrap/Button';
 import db from '../config';
+import * as WebCrawler from '../WebCrawler.js';
 
 
 class button extends React.Component {

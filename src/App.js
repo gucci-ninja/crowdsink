@@ -2,11 +2,10 @@ import React from 'react';
 import './App.css';
 import WordCloud from './components/WordCloud';
 import Header from './components/Header';
-import Hypothesis from './components/Hypothesis';
-import Button from './components/InputForm';
-import Chart from './components/Chart';
+// import Hypothesis from './components/Hypothesis';
 import Info from './components/Info';
 import 'bootstrap/dist/css/bootstrap.min.css';
+require('dotenv').config();
 
 function App() {
   return (
@@ -38,7 +37,7 @@ function App() {
       <br></br>
       <br></br>
       <Info></Info>
-
+      
     </div>
   );
 }

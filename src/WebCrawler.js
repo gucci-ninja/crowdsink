@@ -25,11 +25,17 @@ export const crawlers = [
         parentCrawl: 'article.list-item',
         childCrawl: 'div.text_content'
     },
+    {
+        source: 'Yelp',
+        url: 'https://www.yelp.com/biz/jetblue-airways-new-york',
+        parentCrawl: 'div.review',
+        childCrawl: 'p'
+    },
     // {
-    //     source: 'Yelp',
-    //     url: '',
-    //     parentCrawl: '',
-    //     childCrawl: ''
+    //     source: 'TripAdvisor',
+    //     url: 'https://www.yelp.com/biz/jetblue-airways-new-york',
+    //     parentCrawl: 'div.review',
+    //     childCrawl: 'p'
     // }
 ]
 

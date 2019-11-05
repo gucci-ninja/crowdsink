@@ -1,8 +1,5 @@
 import React from "react";
 import WordCloudd from "react-d3-cloud";
-import InputGroup from 'react-bootstrap/InputGroup';
-import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button';
 import db from '../config';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -11,19 +8,15 @@ import * as WebCrawler from '../WebCrawler.js';
 // import * as utils from './utils.js'; 
 import FadeIn from 'react-fade-in';
 const data = [
-  { text: "Hey", value: 1000 },
-  { text: "lol", value: 200 },
-  { text: "first impression", value: 800 },
-  { text: "very cool", value: 1000000 },
-  { text: "Heys", value: 1000},
-  { text: "losl", value: 200 },
-  { text: "fisrst impression", value: 800 },
-  { text: "versy cool", value: 1000000 },
-  { text: "Hewy", value: 1000},
-  { text: "lowl", value: 200 },
-  { text: "first wimpression", value: 800 },
-  { text: "very coowl", value: 1000000 },
-  { text: "duck", value: 10 }
+  { text: "Quick Service", value: 1000 },
+  { text: "delay", value: 100000 },
+  { text: "Comfort", value: 800 },
+  { text: "courteous", value: 100000 },
+  { text: "Rude", value: 500 },
+  { text: "Airport", value: 10000 },
+  { text: "cancel", value: 100000 },
+  { text: "Customer Service", value: 100000 },
+  { text: "Food", value: 1000 }
 ];
 
 const fontSizeMapper = word => Math.log2(word.value) * 5;
@@ -87,17 +80,6 @@ class WordCloud extends React.Component {
   render() {
     return (
       <div class="container">
-        <InputGroup className="mb-3">
-          <FormControl
-            placeholder="Thing"
-            aria-label="company"
-            aria-describedby="basic-addon2"
-            size="lg"
-          />
-          <InputGroup.Append>
-            <Button variant="primary" size="lg" onClick={this.doStuff}>Go</Button>
-          </InputGroup.Append>
-        </InputGroup>
         <FadeIn>
           <div><WordCloudd data={data} fontSizeMapper={fontSizeMapper} rotate={rotate} /></div>
         </FadeIn>

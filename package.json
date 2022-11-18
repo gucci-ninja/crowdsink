@@ -15,7 +15,7 @@
     "react-d3-cloud": "^0.7.0",
     "react-dom": "^16.11.0",
     "react-fade-in": "^0.1.6",
-    "react-scripts": "3.2.0",
+    "react-scripts": "5.0.1",
     "request": "^2.88.0",
     "twitter": "^1.7.1",
     "wordcloud": "^1.1.0"
